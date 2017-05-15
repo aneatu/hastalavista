@@ -1,6 +1,7 @@
 package com.ixxus.hastalavista.crawler.api
 
 import org.springframework.web.bind.annotation._
+import org.springframework.web.client.RestTemplate
 
 import scala.xml.XML
 
@@ -26,9 +27,11 @@ class RestAPI extends AbstractController{
         val result = crawler.crawlerToXML(urls.head, linksToScan)
 
         // TODO: send it over to Michael's store
-        result.foreach(t => println(s"(${t._1}, ${truncate(t._2.replaceAll("\n", ""))})"))
+        //result.foldLeft("<pages>")({t: (String, String) => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>"})
+        val xmlRes = "<pages>" + result.map(t => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>").mkString + "</pages>"
+
+
+        val restTemplate: RestTemplate = new RestTemplate()
+        restTemplate.postForObject("http://localhost:8090/pages", xmlRes, classOf[String])
     }
-
-    private def truncate(str: String) = if (str.length > 10) str.substring(0, 20) else str
-
 }
