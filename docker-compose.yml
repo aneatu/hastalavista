@@ -1,0 +1,58 @@
+version: '2'
+services:
+
+  crawler:
+    image: inexus.ixxus.co.uk:28443/ixxus/hlv-webcrawler:development
+    container_name: hlv-webcrawler
+    ports:
+      - "8090:8090"
+    environment:
+      SPRING_PROFILES_ACTIVE: "dev"
+#    depends_on:
+#      - configurator
+#    volumes:
+#      - ./data:/data
+    build:
+      context: ./hlv-crawler
+
+  search:
+      image: inexus.ixxus.co.uk:28443/ixxus/hlv-search:development
+      container_name: hlv-search
+      ports:
+        - "8090:8090"
+      environment:
+        SPRING_PROFILES_ACTIVE: "dev"
+  #    depends_on:
+  #      - configurator
+  #    volumes:
+  #      - ./data:/data
+      build:
+        context: ./hlv-search
+
+  analytics:
+      image: inexus.ixxus.co.uk:28443/ixxus/hlv-analytics:development
+      container_name: hlv-analytics
+      ports:
+        - "8090:8090"
+      environment:
+        SPRING_PROFILES_ACTIVE: "dev"
+  #    depends_on:
+  #      - configurator
+  #    volumes:
+  #      - ./data:/data
+      build:
+        context: ./hlv-analytics
+
+  datastore:
+      image: inexus.ixxus.co.uk:28443/ixxus/hlv-datastore:development
+      container_name: hlv-datastore
+      ports:
+        - "8090:8090"
+      environment:
+        SPRING_PROFILES_ACTIVE: "dev"
+  #    depends_on:
+  #      - configurator
+  #    volumes:
+  #      - ./data:/data
+      build:
+        context: ./hlv-datastore
