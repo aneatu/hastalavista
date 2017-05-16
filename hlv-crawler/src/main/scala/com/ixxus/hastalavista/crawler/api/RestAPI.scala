@@ -20,6 +20,7 @@ class RestAPI extends AbstractController{
       *
       * API responsible to start the crawler with a specific URL.
       *
+      * This is the POST body sent to the store application after the pages are downloaded.
       * <code>
       *     <pages>
       *         <page>
