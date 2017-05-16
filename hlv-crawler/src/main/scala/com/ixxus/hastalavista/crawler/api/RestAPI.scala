@@ -14,7 +14,8 @@ class RestAPI extends AbstractController{
 
     val linksToScan: Int = 100
 
-    val  xml11pattern: String = "[^" + "\u0001-\uD7FF" + "\uE000-\uFFFD" + "\ud800\udc00-\udbff\udfff" + "]+";
+    val  xml11pattern: String = "[^\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\u10000-u10FFFF]"
+
 
     /**
       *
@@ -45,7 +46,7 @@ class RestAPI extends AbstractController{
 
         // folding with functions
         val xmlRes = result.foldLeft(StringBuilder.newBuilder.append("<pages>"))((acc: StringBuilder, t: (String, String)) =>
-                                                acc.append("<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>")).append("</pages>").mkString.replaceAll(xml11pattern, "")
+                                                acc.append("<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>")).append("</pages>").mkString
 
         // partial function
         val xmlRes1 = result.foldLeft(StringBuilder.newBuilder.append("<pages>")){
@@ -55,8 +56,7 @@ class RestAPI extends AbstractController{
         // this is using maps
         val xmlResMap = "<pages>" + result.map(t => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>").mkString + "</pages>"
 
-
         val restTemplate: RestTemplate = new RestTemplate()
-        restTemplate.postForObject("http://localhost:8090/pages", xmlRes, classOf[String])
+        restTemplate.postForObject("http://localhost:8090/pages", xmlRes.replaceAll("&", ""), classOf[String])
     }
 }

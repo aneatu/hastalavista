@@ -16,9 +16,13 @@ class SearchController() extends AbstractController {
 
     val searchService = ConfigObject.searchService
 
-    @RequestMapping(value = Array("/find/page"),
-        method = Array(RequestMethod.GET))
+    @RequestMapping(value = Array("/find/page"), method = Array(RequestMethod.GET))
     def findPages(@RequestParam url: String) = {
         searchService.findPage(url)
+    }
+
+    @RequestMapping(value = Array("/find"), method = Array(RequestMethod.GET))
+    def findByTerm(@RequestParam term: String) = {
+        searchService.findByTerm(term)
     }
 }

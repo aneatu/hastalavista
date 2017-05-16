@@ -7,4 +7,5 @@ import com.ixxus.hastalavista.ConfigObject
   */
 trait AbstractService {
     val pageStore = ConfigObject.hastaStore.pageStore
+    val anaStore = ConfigObject.hastaStore.anaStore
 }
