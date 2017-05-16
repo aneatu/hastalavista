@@ -6,6 +6,7 @@ import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 import scala.io.Source
 import scala.util.Try
+import scala.concurrent.blocking
 
 /**
   * Created by alexneatu on 10/05/2017.
@@ -70,7 +71,10 @@ trait ScanServiceComponent {
         def crawlerPage(url: String) = {
             println("Downloading..." + Thread.currentThread().getName + " " + url)
             val html = Try {
-                Source.fromURL(url).mkString
+                // blocking gives you a lot of boost, check the slides!!
+                blocking {
+                    Source.fromURL(url).mkString
+                }
             }.getOrElse("Not found")
 
             val links: Set[String] = Try {

@@ -1,5 +1,7 @@
 spring:
   application:
-    name: crawler
+    name: datastore
   profiles:
     active: dev
+  server:
+    port: 8090

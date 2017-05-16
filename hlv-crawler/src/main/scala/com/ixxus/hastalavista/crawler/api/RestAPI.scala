@@ -14,9 +14,24 @@ class RestAPI extends AbstractController{
 
     val linksToScan: Int = 100
 
+    val  xml11pattern: String = "[^" + "\u0001-\uD7FF" + "\uE000-\uFFFD" + "\ud800\udc00-\udbff\udfff" + "]+";
+
     /**
       *
       * API responsible to start the crawler with a specific URL.
+      *
+      * <code>
+      *     <pages>
+      *         <page>
+      *             <url>blaba</url>
+      *             <contents>content</contents>
+      *        </page>
+      *        <page>
+      *             <url>blaba</url>
+      *             <contents>content</contents>
+      *         </page>
+      *     </pages>
+      * </code>
       *
       * @param body to extract the URLs to crawler
       */
@@ -26,9 +41,18 @@ class RestAPI extends AbstractController{
         val urls = (xml \ "url").map(_.text)
         val result = crawler.crawlerToXML(urls.head, linksToScan)
 
-        // TODO: send it over to Michael's store
-        //result.foldLeft("<pages>")({t: (String, String) => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>"})
-        val xmlRes = "<pages>" + result.map(t => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>").mkString + "</pages>"
+
+        // folding with functions
+        val xmlRes = result.foldLeft(StringBuilder.newBuilder.append("<pages>"))((acc: StringBuilder, t: (String, String)) =>
+                                                acc.append("<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>")).append("</pages>").mkString.replaceAll(xml11pattern, "")
+
+        // partial function
+        val xmlRes1 = result.foldLeft(StringBuilder.newBuilder.append("<pages>")){
+            case (builder, (url, content)) => builder.append("<page><url>" + url + "</url><contents>" + content + "</contents></page>")
+        }.append("</pages>").mkString
+
+        // this is using maps
+        val xmlResMap = "<pages>" + result.map(t => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>").mkString + "</pages>"
 
 
         val restTemplate: RestTemplate = new RestTemplate()
