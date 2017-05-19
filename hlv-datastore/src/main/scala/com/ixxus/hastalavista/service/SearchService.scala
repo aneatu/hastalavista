@@ -1,7 +1,7 @@
 package com.ixxus.hastalavista.service
 
 /**
-  * Created by Michael.Seddon on 12-May-17.
+  * Created by alexneatu on 17-May-17.
   */
 class SearchService extends AbstractService {
 
