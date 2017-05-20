@@ -1,5 +1,6 @@
 package com.ixxus.hastalavista.service
 
+import com.ixxus.hastalavista.store.HastaStore
 import com.ixxus.hastalavista.{ConfigObject, StoreTest}
 
 /**
@@ -8,7 +9,7 @@ import com.ixxus.hastalavista.{ConfigObject, StoreTest}
 class StoreServiceTest extends StoreTest {
 
    val storeService = ConfigObject.storeService
-   val pageStore =  ConfigObject.hastaStore.pageStore
+   val pageStore =  HastaStore
 
     override def beforeEach(): Unit = {
         pageStore.pages = Set()
@@ -16,7 +17,7 @@ class StoreServiceTest extends StoreTest {
 
     "StoreService" should "have access to the PageStore" in {
         storeService should not be nullable
-        storeService.pageStore should not be nullable
+        pageStore should not be nullable
     }
 
     it should "provide a mechanism to add a Page to the PageStore" in {

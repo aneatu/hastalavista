@@ -1,5 +1,6 @@
 package com.ixxus.hastalavista.crawler.api
 
+import com.ixxus.hastalavista.crawler.services.ScanService
 import org.springframework.web.bind.annotation._
 import org.springframework.web.client.RestTemplate
 
@@ -10,7 +11,7 @@ import scala.xml.XML
   */
 
 @RestController
-class RestAPI extends AbstractController{
+class RestAPI {
 
     val linksToScan: Int = 100
 
@@ -41,7 +42,7 @@ class RestAPI extends AbstractController{
     def startCrawling(@RequestBody body: String) = {
         val xml = XML.loadString(body)
         val urls = (xml \ "url").map(_.text)
-        val result = crawler.crawlerToXML(urls.head, linksToScan)
+        val result = ScanService.crawlerToXML(urls.head, linksToScan)
 
 
         // folding with functions
@@ -49,12 +50,12 @@ class RestAPI extends AbstractController{
                                                 acc.append("<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>")).append("</pages>").mkString
 
         // partial function
-        val xmlRes1 = result.foldLeft(StringBuilder.newBuilder.append("<pages>")){
-            case (builder, (url, content)) => builder.append("<page><url>" + url + "</url><contents>" + content + "</contents></page>")
-        }.append("</pages>").mkString
+        //val xmlRes1 = result.foldLeft(StringBuilder.newBuilder.append("<pages>")){
+        //    case (builder, (url, content)) => builder.append("<page><url>" + url + "</url><contents>" + content + "</contents></page>")
+        //}.append("</pages>").mkString
 
         // this is using maps
-        val xmlResMap = "<pages>" + result.map(t => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>").mkString + "</pages>"
+        //val xmlResMap = "<pages>" + result.map(t => "<page><url>" + t._1 + "</url><contents>" + t._2 + "</contents></page>").mkString + "</pages>"
 
         val restTemplate: RestTemplate = new RestTemplate()
         restTemplate.postForObject("http://localhost:8090/pages", xmlRes.replaceAll("&", ""), classOf[String])

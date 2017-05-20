@@ -14,9 +14,4 @@ object CrawlerApplication  {
     def main(args: Array[String]): Unit = {
         SpringApplication.run(classOf[CrawlerApplication])
     }
-
-    object  ConfigObject extends CrawlerComponent {
-        val crawler = new CrawlerImpl
-    }
-
 }

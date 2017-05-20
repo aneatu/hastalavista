@@ -5,9 +5,9 @@ import com.ixxus.hastalavista.StoreTest
 /**
   * Created by Michael.Seddon on 09-May-17.
   */
-class PageStoreTest extends StoreTest with PageStoreComponent {
+class PageStoreTest extends StoreTest {
 
-    override val pageStore: PageStore = new PageStoreImpl
+    val pageStore: PageStore = HastaStore
     val pageToAdd = Page("url1", "contents")
     var pageToAddRemove = Page("url2", "contents")
 

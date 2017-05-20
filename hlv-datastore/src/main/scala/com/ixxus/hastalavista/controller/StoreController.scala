@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation._
   * Created by Michael.Seddon on 10-May-17.
   */
 @RestController
-class StoreController() extends AbstractController {
+class StoreController() {
 
     val storeService = ConfigObject.storeService
 

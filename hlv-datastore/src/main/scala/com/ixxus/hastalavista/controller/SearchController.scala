@@ -12,7 +12,7 @@ import scala.xml.XML
   * Created by Michael.Seddon on 10-May-17.
   */
 @RestController
-class SearchController() extends AbstractController {
+class SearchController() {
 
     val searchService = ConfigObject.searchService
 

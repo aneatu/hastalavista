@@ -1,7 +1,6 @@
 package com.ixxus.hastalavista
 
 import com.ixxus.hastalavista.service.{SearchService, StoreService}
-import com.ixxus.hastalavista.store.HastaStoreComponent
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.{ComponentScan, Configuration}
@@ -18,8 +17,7 @@ object StoreApplication {
     }
 }
 
-object ConfigObject extends HastaStoreComponent {
-    val hastaStore = new HastaStoreImpl()
+object ConfigObject {
     val storeService = new StoreService()
     val searchService = new SearchService()
 }

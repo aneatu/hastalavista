@@ -1,6 +1,6 @@
 package com.ixxus.hastalavista.service
 
-import com.ixxus.hastalavista.store.Page
+import com.ixxus.hastalavista.store.{HastaStore, Page}
 import com.ixxus.hastalavista.{ConfigObject, StoreTest}
 
 /**
@@ -9,7 +9,7 @@ import com.ixxus.hastalavista.{ConfigObject, StoreTest}
 class SearchServiceTest extends StoreTest {
 
    val searchService = ConfigObject.searchService
-   val pageStore =  ConfigObject.storeService.pageStore
+   val pageStore =  HastaStore
 
     override def beforeEach(): Unit = {
         pageStore.pages = Set()
@@ -17,7 +17,7 @@ class SearchServiceTest extends StoreTest {
 
     "SearchService" should "have access to the PageStore" in {
         searchService should not be nullable
-        searchService.pageStore should not be nullable
+        pageStore should not be nullable
     }
 
     it should "provide a mechanism to search for pages by URL" in {

@@ -11,17 +11,9 @@ import scala.concurrent.blocking
 /**
   * Created by alexneatu on 10/05/2017.
   */
-trait ScanServiceComponent {
+object ScanService {
 
-    trait ScanService {
-        def crawlerToXML(url: String, noLinksToScan: Int): Set[(String, String)]
-    }
-
-    val scanService: ScanService
-
-    class ScanServiceImpl extends ScanService {
-
-        override def crawlerToXML(url: String, noLinksToScan: Int): Set[(String, String)] = {
+        def crawlerToXML(url: String, noLinksToScan: Int): Set[(String, String)] = {
            /* time {
                 val futRes = crawler(url, noLinksToScan)
                 val res = Await.result(futRes, Duration.Inf)
@@ -35,13 +27,13 @@ trait ScanServiceComponent {
 
         implicit val ec = scala.concurrent.ExecutionContext.global
 
-        val findHref = "(?i)<a([^>]+)>(.+?)</a>".r
-        val findLink = "\\s*(?i)href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))".r
-        val removeScript = "<(script|style).*?</\\1>".r
-        val removeTags = "<.*?>".r
+        private val findHref = "(?i)<a([^>]+)>(.+?)</a>".r
+        private val findLink = "\\s*(?i)href\\s*=\\s*(\"([^\"]*\")|'[^']*'|([^'\">\\s]+))".r
+        private val removeScript = "<(script|style).*?</\\1>".r
+        private val removeTags = "<.*?>".r
 
 
-        def scrapper(url: String, html: String): Set[String] = {
+        private def scrapper(url: String, html: String): Set[String] = {
             val jUrl = new URL(url)
             val path = jUrl.getFile.substring(0, jUrl.getFile.lastIndexOf('/'))
             val base = jUrl.getProtocol + "://" + jUrl.getHost
@@ -62,13 +54,13 @@ trait ScanServiceComponent {
                 .toSet[String]
         }
 
-        def crawler(url: String, count: Int) = {
+        private def crawler(url: String, count: Int) = {
             println(s"$url - $count")
             val (links, page) = crawlerPage(url)
             recursiveCrawler(count - 1, links, Set(url), Set(page))
         }
 
-        def crawlerPage(url: String) = {
+        private def crawlerPage(url: String) = {
             println("Downloading..." + Thread.currentThread().getName + " " + url)
             val html = Try {
                 // blocking gives you a lot of boost, check the slides!!
@@ -87,7 +79,7 @@ trait ScanServiceComponent {
             (links, (url, text))
         }
 
-        def recursiveCrawler(count: Int, links: Set[String], linksDone: Set[String], pagesDone: Set[(String, String)]): Future[Set[(String, String)]] = {
+        private def recursiveCrawler(count: Int, links: Set[String], linksDone: Set[String], pagesDone: Set[(String, String)]): Future[Set[(String, String)]] = {
             if (links.isEmpty || count < 1) {
                 Future.successful(pagesDone)
             } else {
@@ -123,9 +115,8 @@ trait ScanServiceComponent {
                     }
             }
         }
-    }
 
-    def time[R](block: => R): R = {
+    private def time[R](block: => R): R = {
         import java.time.{Duration, Instant}
 
         val start = Instant.now()

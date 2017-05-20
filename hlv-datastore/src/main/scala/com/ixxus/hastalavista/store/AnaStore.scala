@@ -8,26 +8,19 @@ import scala.collection.immutable.HashSet
   *
   * Created by aneatu
   */
-trait AnaStoreComponent {
 
-    trait AnaStore {
-        var words: Map[String, Int]
-        var terms: Map[String, Int]
+trait AnaStore {
 
-        def addWord(word: String) = { words += word -> (words.getOrElse(word, 0) + 1) }
-        def addTerm(term: String) = { terms += term -> (terms.getOrElse(term, 0) + 1) }
+    var words: Map[String, Int]
+    var terms: Map[String, Int]
 
-        //def updateMap[String, Int](map: Map[String, Int], key: String) =  map updated (key, map.getOrElse(key, 0) + 1)  -- this is wrong because it uses generics
-        //def updateMap(map: Map[String, Int], key: String): Map[String, Int] = map updated(key, map.getOrElse(key, 0) + 1) -- nice one
+    def addWord(word: String) =  words += word -> (words.getOrElse(word, 0) + 1)
+    def addTerm(term: String) =  terms += term -> (terms.getOrElse(term, 0) + 1)
 
-        // This could be used but multiple maps fields are defined
-        //def +=(t: (String, Int)) {words +=t}
-    }
+    //def updateMap[String, Int](map: Map[String, Int], key: String) =  map updated (key, map.getOrElse(key, 0) + 1)  -- this is wrong because it uses generics
+    //def updateMap(map: Map[String, Int], key: String): Map[String, Int] = map updated(key, map.getOrElse(key, 0) + 1) -- nice one
 
-    val anaStore: AnaStore
+    // This could be used but multiple maps fields are defined
+    //def +=(t: (String, Int)) {words +=t}
 
-    class AnaStoreImpl extends AnaStore {
-        override var words: Map[String, Int] = Map()
-        override var terms: Map[String, Int] = Map()
-    }
 }
