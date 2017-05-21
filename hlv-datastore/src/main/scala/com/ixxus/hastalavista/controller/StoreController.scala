@@ -13,22 +13,17 @@ class StoreController() {
 
     val storeService = ConfigObject.storeService
 
-    @RequestMapping(value = Array("/page"),
-        method = Array(RequestMethod.POST),
-        consumes = Array("text/plain"))
+    @RequestMapping(value = Array("/page"), method = Array(RequestMethod.POST), consumes = Array("text/plain"))
     def addPage(@RequestBody body: String) = {
         storeService.addPage(body)
     }
 
-    @RequestMapping(value = Array("/pages"),
-        method = Array(RequestMethod.POST),
-        consumes = Array("text/plain"))
+    @RequestMapping(value = Array("/pages"), method = Array(RequestMethod.POST), consumes = Array("text/plain"))
     def addPages(@RequestBody body: String) = {
         storeService.addPages(body)
     }
 
-    @RequestMapping(value = Array("/pages"),
-        method = Array(RequestMethod.GET))
+    @RequestMapping(value = Array("/pages"), method = Array(RequestMethod.GET))
     def getPages() = {
         storeService.getPages()
     }

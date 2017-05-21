@@ -5,7 +5,7 @@ import com.ixxus.hastalavista.store.{HastaStore, Page}
 import scala.xml.XML
 
 /**
-  * Created by Michael.Seddon on 12-May-17.
+  *
   */
 class StoreService {
 

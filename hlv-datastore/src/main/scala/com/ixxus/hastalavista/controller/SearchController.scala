@@ -9,7 +9,7 @@ import scala.xml.XML
 /**
   * Controller providing search API access to the Store(s)
   *
-  * Created by Michael.Seddon on 10-May-17.
+  *
   */
 @RestController
 class SearchController() {
