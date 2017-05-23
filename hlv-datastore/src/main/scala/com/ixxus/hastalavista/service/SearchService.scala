@@ -81,7 +81,7 @@ class SearchService {
             val sublist: List[(String, Int)] = termList.map(term => occ.filter(_._1 == term))
                 .flatMap(index => index)
 
-            // check that indexes are in consecutive order
+            // calculate the distance
             if (sublist.size == termList.size) {
                 val distance = -calcDistance(sublist.map(t => t._2))
                 if (distance > 10) {
