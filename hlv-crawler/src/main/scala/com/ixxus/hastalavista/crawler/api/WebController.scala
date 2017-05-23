@@ -24,9 +24,4 @@ class WebController {
     def analyticsForm(): String = {
         "analytics"
     }
-
-    @GetMapping(Array("/test"))
-    def test(): ModelAndView = {
-        new ModelAndView("redirect:" + "http://www.google.co.uk")
-    }
 }
