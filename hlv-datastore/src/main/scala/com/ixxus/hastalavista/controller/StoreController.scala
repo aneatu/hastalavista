@@ -1,6 +1,8 @@
 package com.ixxus.hastalavista.controller
 
 import com.ixxus.hastalavista.ConfigObject
+import com.ixxus.hastalavista.datastore.rest.ResponseApi
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation._
 
 /**
@@ -19,8 +21,9 @@ class StoreController() {
     }
 
     @RequestMapping(value = Array("/pages"), method = Array(RequestMethod.POST), consumes = Array("text/plain"))
-    def addPages(@RequestBody body: String) = {
+    def addPages(@RequestBody body: String): ResponseEntity[ResponseApi] = {
         storeService.addPages(body)
+        ResponseEntity.ok(new ResponseApi("200", "Success"))
     }
 
     @RequestMapping(value = Array("/pages"), method = Array(RequestMethod.GET))

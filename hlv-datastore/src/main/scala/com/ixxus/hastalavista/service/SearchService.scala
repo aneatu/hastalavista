@@ -14,26 +14,24 @@ class SearchService {
         (for (f <- found) yield f.puid + " " + f.url + "---" + f.rawContents).mkString("\n")
     }
 
-    def findByTerm(term: String): String = {
+    def findByTerm(term: String): List[(String, String, Int, Int)] = {
         val terms = term.split(" ").toList
-        var result = ""
 
         if (terms.size == 1) {
             HastaStore.addWord(term)
-            val found = HastaStore.pages
-                .filter(p => p.delimContents.contains(term))
-                .toList
-                .sortWith(_.parsedContents.getOrElse(term, 0) > _.parsedContents.getOrElse(term, 0))
 
-            result = (for (f <- found) yield f.puid + " " + f.url + " --- " + term + " / " + f.parsedContents.get(term)
-                + " / no searches: " + HastaStore.words.getOrElse(term, 0)).mkString("\n")
+            HastaStore.pages
+                        .filter(p => p.delimContents.contains(term))
+                        .toList
+                        .sortWith(_.parsedContents.getOrElse(term, 0) > _.parsedContents.getOrElse(term, 0))
+                        .map(p => (p.puid, p.url, p.parsedContents.getOrElse(term, 0), 0))
         } else {
             // add the searched terms to analytics
             HastaStore.addTerm(term)
             // add each term from searched terms to analytics
             terms.foreach(HastaStore.addWord)
 
-            val found = HastaStore.pages
+            HastaStore.pages
                         .par // run in parallel
                         .toIterator // doesnt create new datastructue after each call , just keeps everything in the iterator
                         .map(p =>  (p.puid,
@@ -47,12 +45,7 @@ class SearchService {
                         .filter(_._4 < 100)
                         .toList
                         .sortBy(t => (-t._3, t._4))
-            result = (for (f <- found)
-                        yield f._1 + " " + f._2 + " --- " + term + " / " + f._3 + " / distance: " + f._4)
-                        .mkString("\n")
         }
-
-        result
     }
 
     /**
@@ -66,7 +59,7 @@ class SearchService {
 
     /**
       *
-      * TODO: change to tailrec, use an method parametr to keep the result
+      * TODO: change to tailrec, use an method parameter to keep the result
       *
       * @param termList list of words to search for
       * @param occ list of tuples (word, position) in page for the searched terms
