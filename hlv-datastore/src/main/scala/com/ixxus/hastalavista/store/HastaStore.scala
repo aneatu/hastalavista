@@ -1,12 +1,11 @@
 package com.ixxus.hastalavista.store
 
 /**
-  * Main store for the search engine
-  *
-  * Created by Michael.Seddon on 09-May-17.
+  * The main store, through this object all the other stores are accessible.
   *
   * TODO: Make it thread safe
   *
+  * Created by alexneatu on 22/05/2017.
   */
 object HastaStore extends AnaStore with PageStore {
     override var words: Map[String, Int] = Map()

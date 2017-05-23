@@ -9,7 +9,8 @@ import scala.util.Try
 import scala.concurrent.blocking
 
 /**
-  * Created by alexneatu on 10/05/2017.
+  *
+  * Created by alexneatu ft. mirko on 10/05/2017.
   */
 object ScanService {
 

@@ -15,20 +15,21 @@ import scala.util.parsing.json.JSON
 
 
 /**
+  * Rest API class responsible to manage all the requests.
+  *
   * Created by alexneatu on 14/05/2017.
   */
 
 @RestController
 class RestAPI {
 
-    val  xml11pattern: String = "[^\\x09\\x0A\\x0D\\x20-\\uD7FF\\uE000-\\uFFFD\\u10000-u10FFFF]"
-
-
     /**
       *
       * API responsible to start the crawler with a specific URL.
       *
       * This is the POST body sent to the store application after the pages are downloaded.
+      * Pages are sent in xml format
+      *
       * <code>
       *     <pages>
       *         <page>
@@ -42,6 +43,10 @@ class RestAPI {
       *     </pages>
       * </code>
       *
+      *
+      * @param crawler  the crawler object that contains the website and how many url to scan
+      * @param errors   erros if the fields dont meet the constraints
+      * @return         ResponseEntity object
       */
     @PostMapping(Array("/crawler"))
     def startCrawling(@RequestBody @Valid crawler: Crawler, errors: Errors): ResponseEntity[ResponseApi] = {
@@ -57,11 +62,8 @@ class RestAPI {
 
             val restTemplate: RestTemplate = new RestTemplate()
             val resp = restTemplate.postForObject("http://localhost:8090/pages", xmlRes, classOf[String])
-            val status = JSON.parseFull(resp) match {
-                case Some(m: Map[String, Any]) => m("status") match {
-                    case s: String => s
-                }
-            }
+            val status = getValueFromJsonByName(resp, "status")
+
             if (status == "200") {
                 var response = new ResponseApi("200", "Success")
                 response.setData(crawler)
@@ -72,6 +74,12 @@ class RestAPI {
         }
     }
 
+    /**
+      * GET request to search for a specific term. Another call to store application is triggered to get info.
+      *
+      * @param term term to search for
+      * @return     list of pages found plus occurrences and distances (in case of multiple terms are searched)
+      */
     @GetMapping(Array("/find"))
     def findByTerm(@RequestParam term: String):  ResponseEntity[String] = {
         if (term.isEmpty) {
@@ -84,6 +92,11 @@ class RestAPI {
         }
     }
 
+    /**
+      * Gets all the statistics from HastaStore and return them.
+      *
+      * @return list of words, terms and urls for analytics page
+      */
     @GetMapping(Array("/analyticsData"))
     def analytics():  ResponseEntity[String] = {
         val restTemplate: RestTemplate = new RestTemplate()
@@ -92,11 +105,32 @@ class RestAPI {
         ResponseEntity.ok(resp)
     }
 
+    /**
+      * This method update the analytics store for clicked urls and redirects to the clicked link.
+      *
+      * @param page the page uuid
+      * @return     a redirect to the clicked page
+      */
     @GetMapping(Array("/pageAnalytics"))
     def pageAnalytics(@RequestParam page: String):  ModelAndView = {
         val restTemplate: RestTemplate = new RestTemplate()
         val url = restTemplate.getForObject("http://localhost:8090/pageAnalytics?page={page}", classOf[String], page.trim)
         val fixUrl = (xurl: String) => {if (xurl.startsWith("www")) "http://" + xurl else xurl }
         new ModelAndView("redirect:" + fixUrl(url))
+    }
+
+    /**
+      * Parse the string to JSON and extract value for a specific key.
+      *
+      * @param jsonStr  json in string format
+      * @param keyName  key name that is searched for
+      * @return         key's value
+      */
+    private def getValueFromJsonByName(jsonStr: String, keyName: String): String = {
+        JSON.parseFull(jsonStr) match {
+            case Some(m: Map[String, Any]) => m(keyName) match {
+                case s: String => s
+            }
+        }
     }
 }

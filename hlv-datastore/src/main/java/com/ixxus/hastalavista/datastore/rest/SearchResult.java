@@ -1,7 +1,9 @@
 package com.ixxus.hastalavista.datastore.rest;
 
 /**
- * Created by alexneatu on 22/05/2017.
+ *  Bean used to send data.
+ *
+ *  Created by alexneatu on 22/05/2017.
  */
 public class SearchResult {
 

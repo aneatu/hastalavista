@@ -1,6 +1,7 @@
 package com.ixxus.hastalavista.datastore.rest;
 
 /**
+ * Bean used to send data.
  * Created by alexneatu on 22/05/2017.
  */
 public class ResponseApi {

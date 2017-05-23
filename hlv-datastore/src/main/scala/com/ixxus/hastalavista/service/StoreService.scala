@@ -5,7 +5,9 @@ import com.ixxus.hastalavista.store.{HastaStore, Page}
 import scala.xml.XML
 
 /**
+  * Store Service.
   *
+  * Created by alexneatu on 22/05/2017.
   */
 class StoreService {
 
@@ -26,5 +28,4 @@ class StoreService {
     }
 
     def getPages(): String = (for (p <- HastaStore.pages) yield p.puid + " " + p.url).mkString("\n")
-
 }

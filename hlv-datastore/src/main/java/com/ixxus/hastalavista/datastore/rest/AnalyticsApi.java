@@ -3,6 +3,8 @@ package com.ixxus.hastalavista.datastore.rest;
 import java.util.Map;
 
 /**
+ * Bean used to send data.
+ *
  * Created by alexneatu on 22/05/2017.
  */
 public class AnalyticsApi extends ResponseApi {

@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.servlet.ModelAndView
 
 /**
+  * Navigation controller.
+  *
   * Created by alexneatu on 22/05/2017.
   */
 @Controller

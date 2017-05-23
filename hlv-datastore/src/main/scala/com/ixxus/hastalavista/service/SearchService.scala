@@ -5,6 +5,8 @@ import com.ixxus.hastalavista.store.HastaStore
 import scala.annotation.tailrec
 
 /**
+  * Search Service.
+  *
   * Created by alexneatu on 17-May-17.
   */
 class SearchService {
@@ -14,6 +16,12 @@ class SearchService {
         (for (f <- found) yield f.puid + " " + f.url + "---" + f.rawContents).mkString("\n")
     }
 
+    /**
+      * Search for a specific term in the PageStore.
+      *
+      * @param term term to search for
+      * @return     list of results
+      */
     def findByTerm(term: String): List[(String, String, Int, Int)] = {
         val terms = term.split(" ").toList
 

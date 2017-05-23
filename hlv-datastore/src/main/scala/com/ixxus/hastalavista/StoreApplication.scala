@@ -17,6 +17,9 @@ object StoreApplication {
     }
 }
 
+/**
+  * Used to wire up all the services
+  */
 object ConfigObject {
     val storeService = new StoreService()
     val searchService = new SearchService()
