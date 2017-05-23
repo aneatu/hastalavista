@@ -45,7 +45,7 @@ class SearchService {
                         .map(p =>  (p.puid,
                                     p.url,
                                     terms.map(kw => p.parsedContents.getOrElse(kw, 0)).sum,
-                                    algDistance(terms, searchTermsInOrder(0, terms, p.delimContents, List()))
+                                    algDistance(terms, searchTermsInOrder(0, terms, p.delimContents, List()), 0)
                                     )
                         )
                         .filter(_._3 > 0)
@@ -71,11 +71,13 @@ class SearchService {
       *
       * @param termList list of words to search for
       * @param occ list of tuples (word, position) in page for the searched terms
+      * @param acc accumulator for final result
       * @return distance calculated
       */
-    private def algDistance(termList: List[String], occ: List[(String, Int)]): Int = {
+    @tailrec
+    private def algDistance(termList: List[String], occ: List[(String, Int)], acc: Int): Int = {
         if (occ.size < 2) {
-            0
+            acc
         } else {
             // this is a sublist with first elements found in the searched order
             val sublist: List[(String, Int)] = termList.map(term => occ.filter(_._1 == term))
@@ -85,12 +87,12 @@ class SearchService {
             if (sublist.size == termList.size) {
                 val distance = -calcDistance(sublist.map(t => t._2))
                 if (distance > 10) {
-                    algDistance(termList, occ.filterNot(sublist.toSet))
+                    algDistance(termList, occ.filterNot(sublist.toSet), acc)
                 } else {
-                    distance + algDistance(termList, occ.filterNot(sublist.toSet))
+                    algDistance(termList, occ.filterNot(sublist.toSet), distance + acc)
                 }
             } else {
-                algDistance(termList.filterNot(List(termList.head).toSet), occ.filterNot(sublist.filterNot(List(sublist.head).toSet).toSet))
+                algDistance(termList.filterNot(List(termList.head).toSet), occ.filterNot(sublist.filterNot(List(sublist.head).toSet).toSet), acc)
             }
         }
     }
